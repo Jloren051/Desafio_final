@@ -30,8 +30,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_JULIA }}
+          password: ${{ secrets.DOCKERHUB_CODIGO }}
      
       - name: Build and Push Docker image
         uses: docker/build-push-action@v4
@@ -39,10 +39,10 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meuapp:latest
+          tags: ${{ secrets.DOCKERHUB_JULIA }}/meuapp:latest
   
   test:
-
+    name: Testes
     runs-on: ubuntu-latest
     needs: build
 
@@ -67,4 +67,3 @@ jobs:
       - name: Build da imagem Docker
         run: |
           docker build -t flask-api .
-
