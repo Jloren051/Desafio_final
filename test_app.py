@@ -11,33 +11,30 @@ class APITestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.client = app.test_client()
 
-    # 1) Teste rota que retorna dados públicos
-    def test_public_data(self):
-        response = self.client.get('/data')
+    # 1) Rota home /
+    def test_home(self):
+        response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(response.json, dict)
+        self.assertEqual(response.json, {"message": "API is running"})
 
-    # 2) Teste rota POST com corpo JSON (ex: somar números)
-    def test_sum_numbers(self):
-        payload = {"a": 5, "b": 7}
-        response = self.client.post('/sum', json=payload)
+    # 2) Teste do login
+    def test_login(self):
+        response = self.client.post('/login')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json.get("result"), 12)
+        self.assertIn("access_token", response.json)
 
-    # 3) Teste rota protegida com token válido
+    # 3) Rota protegida com token válido
     def test_protected_with_token(self):
-        # Primeiro obtém o token
         login = self.client.post('/login')
-        token = login.json.get("access_token")
+        token = login.json["access_token"]
 
-        # Usa o token na rota protegida
         response = self.client.get(
-            '/protected',
+            "/protected",
             headers={"Authorization": f"Bearer {token}"}
         )
+
         self.assertEqual(response.status_code, 200)
         self.assertIn("message", response.json)
 
 if __name__ == '__main__':
     unittest.main()
-

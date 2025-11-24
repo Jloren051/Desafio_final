@@ -50,7 +50,24 @@ jobs:
         run: |
           docker build -t flask-api .
 
-      - name: Rodar testes no contener do Docker
+      - name: Rodar testes no contêiner Docker
         run: |
           docker run --rm flask-api python -m unittest discover -s . -p "test_app.py"
-     
+
+  deploy:
+    name: Fazendo Deploy no Render
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy usando action do Render
+        uses: johnbeynon/render-deploy-action@v0.0.3
+        with:
+          serviceId: srv-d4dp9j0dl3ps73e9qjk0
+          apiKey: ${{ secrets.DESAFIO_FINAL_JULIA }}
+          clearCache: false
+
+      - name: Acionar Deploy Hook no Render
+        run: |
+          curl -X POST "${{ secrets.HOOK_JULIA }}"
+          echo "Sinal de deploy enviado ao Render."
