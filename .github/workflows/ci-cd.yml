@@ -56,7 +56,7 @@ jobs:
 
   deploy:
     name: Fazendo Deploy no Render (Api)
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
