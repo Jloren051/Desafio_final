@@ -55,7 +55,7 @@ jobs:
           docker run --rm flask-api python -m unittest discover -s . -p "test_app.py"
 
   deploy:
-    name: Fazendo Deploy no Render (Api)
+    name: Deploy no Render (Api)
     needs: test
     runs-on: ubuntu-latest
 
@@ -67,7 +67,7 @@ jobs:
           apiKey: ${{ secrets.DESAFIO_FINAL_JULIA }}
           clearCache: false
 
-      - name: Acionar Deploy Hook no Render
+      - name: Acionando Deploy Hook no Render
         run: |
           curl -X POST "${{ secrets.HOOK_JULIA }}"
           echo "Sinal de deploy enviado ao Render."
